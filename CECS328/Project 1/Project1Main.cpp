@@ -3,21 +3,20 @@
 void userMenu();
 void combination(int, int, int, int, int[], int);
 int calculateValue(int, int);
-long long calculateFactorial(int, int);
-long long choose(int, int);
+int calculateCombination(int, int);
 
 int main()
 {
 	userMenu();
-	system("PAUSE");
 	return 0;
 }
 
 void userMenu()
 {
 	int userChoice = 1;
-	int n = 0, k = 0, a = 0, i = 0, j = 0;
-	int arr[6] = {};
+	int n = 0, k = 0, a = 2, i = 0, j = 0;
+	int arr[99] = {};
+	arr[0] = 1;
 	while (userChoice != 0)
 	{
 		std::cout << "Make a selection\n";
@@ -35,7 +34,22 @@ void userMenu()
 				break;
 			case 1:
 				std::cout << "You chose 1.\n";
-				calculateValue(0, 0);
+				std::cout << "Enter number for n\n";
+				std::cin >> n;
+				std::cout << "Enter number for k\n";
+				std::cin >> k;
+				combination(n, k, a, i, arr, j);
+				arr[0] = 1;
+				std::cout << "{";
+				for (int i = 0; i < 99; i++)
+				{
+					if (arr[i] != 0)
+						std::cout << arr[i];
+					if (arr[i + 1] != 0 && i != 98)
+						std::cout << ",";
+				}
+				std::cout << "}" << std::endl;
+
 				//combination(n, k, a, i, arr, j);
 				break;
 			case 2:
@@ -56,7 +70,7 @@ void combination(int n, int k, int a, int i, int arr[], int j)
 	int value = 0;
 	if (k == 1)
 	{
-		arr[j] = a + 1;
+		arr[j+1] = a + 1;
 		return;
 	}
 	n--;
@@ -64,13 +78,13 @@ void combination(int n, int k, int a, int i, int arr[], int j)
 	while (n >= k)
 	{
 		//take combination calculation and set to value
-		value = 0;
+		value = calculateCombination(n,k);
 		if (i < value)
 		{
-			arr[j] = a;
+			arr[j+1] = a;
 			a++;
 			j++;
-			combination(n, k, a, i, arr, j);
+			combination(n, k, a, i, arr, j+1);
 			return;
 		}
 		else
@@ -98,22 +112,26 @@ int calculateValue(int n, int k)
 	std::cin >> nn;
 	std::cout << "Enter number for k\n";
 	std::cin >> kk;
-	std::cout << "Your 'choose' number: " << choose(nn, kk) << std::endl;
+	std::cout << "Your 'choose' number: " << calculateCombination(nn, kk) << std::endl;
 	return 0;
 }
 
-long long calculateFactorial(int x, int result = 1)
+int calculateCombination(int n, int k)
 {
-	if (x == 1)
-		return result;
-	else
-		return(calculateFactorial(x - 1, x*result));
-}
-
-long long choose(int n, int k)
-{
-	int a = 1;
-	int b = 1;
-	int c = 1;
-	return (     calculateFactorial(n, a) / ((calculateFactorial(n-k, b))*(calculateFactorial(k, c)))               );
+	int t = 1;
+	int tt = 1;
+	for (int i = n; i > (n-k); i--)
+	{
+		t = t*i;
+		std::cout << "t: " << t << std::endl;
+	}
+	std::cout << "k : "<< k << std::endl;
+	for (int j = k; j > 0; j--)
+	{
+		tt = tt*j;
+		std::cout << "tt: " << tt << std::endl;
+	}
+	t = t / tt;
+	std::cout << "Your combination is: " << t << std::endl;
+	return t;
 }
