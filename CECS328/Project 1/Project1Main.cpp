@@ -3,7 +3,9 @@
 void userMenu();
 void combination(int, int, int, int, int[], int);
 int calculateValue(int, int);
-int calculateCombination(int, int);
+bool next_combination(int[], int, int);
+void resetArray(int[]);
+void printArray(int[]);
 
 int main()
 {
@@ -14,12 +16,19 @@ int main()
 void userMenu()
 {
 	int userChoice = 1;
-	int n = 0, k = 0, a = 2, i = 0, j = 0;
-	int arr[99] = {};
-	arr[0] = 1;
+	//S = {1,2,3,...,n}
+	//n is the size of the set
+	//k is the subset size of S
+	//a is the starting number, after 1, of S
+	//i is the i-th subset of A
+	int n = 0, k = 0, a = 0, i = 2, j = 0;
+	int setArray[99] = {};
+	
 	while (userChoice != 0)
 	{
-		std::cout << "Make a selection\n";
+		//resetArray(arr);
+		//arr[0] = 1;
+		std::cout << std::endl << "Make a selection\n";
 		std::cout << "1: \n";
 		std::cout << "2: \n";
 		std::cout << "3: \n";
@@ -38,22 +47,37 @@ void userMenu()
 				std::cin >> n;
 				std::cout << "Enter number for k\n";
 				std::cin >> k;
-				combination(n, k, a, i, arr, j);
-				arr[0] = 1;
-				std::cout << "{";
-				for (int i = 0; i < 99; i++)
+				for (int i = 0; i < n; i++)
 				{
-					if (arr[i] != 0)
-						std::cout << arr[i];
-					if (arr[i + 1] != 0 && i != 98)
-						std::cout << ",";
+					setArray[i] = i;
+					
 				}
-				std::cout << "}" << std::endl;
-
+				printArray(setArray);
+				std::cout << "///////////";
+				//next_combination(arr, 3, 10);
+				for (int i = 0; i < n; i++)
+				{
+					//n is the maxS because the set is S = {1,2,3,...,n}
+					next_combination(setArray, k, n);
+					//combination(n, k, a, i, arr, j);
+					printArray(setArray);
+				}
 				//combination(n, k, a, i, arr, j);
 				break;
 			case 2:
 				std::cout << "You chose 2.\n";
+				std::cout << "Enter number for n\n";
+				std::cin >> n;
+				std::cout << "Enter number for k\n";
+				std::cin >> k;
+				std::cout << "Enter number for a\n";
+				std::cin >> a;
+				std::cout << "Enter number for i\n";
+				std::cin >> i;
+				std::cout << std::endl << "i-th k-subset of your inputs of n = ";
+				std::cout << n << ", k = " << k << ", a = " << a << ", i = " << i << " is: " << std::endl;
+				combination(n, k, a, i, setArray, j);
+				printArray(setArray);
 				break;
 			case 3:
 				std::cout << "You chose 3.\n";
@@ -67,10 +91,10 @@ void userMenu()
 
 void combination(int n, int k, int a, int i, int arr[], int j)
 {
-	int value = 0;
+	//int value = 0;
 	if (k == 1)
 	{
-		arr[j+1] = a + 1;
+		arr[j] = a + 1;
 		return;
 	}
 	n--;
@@ -78,13 +102,13 @@ void combination(int n, int k, int a, int i, int arr[], int j)
 	while (n >= k)
 	{
 		//take combination calculation and set to value
-		value = calculateCombination(n,k);
+		int value = calculateValue(n,k);
 		if (i < value)
 		{
-			arr[j+1] = a;
+			arr[j] = a;
 			a++;
 			j++;
-			combination(n, k, a, i, arr, j+1);
+			combination(n, k, a, i, arr, j);
 			return;
 		}
 		else
@@ -95,43 +119,70 @@ void combination(int n, int k, int a, int i, int arr[], int j)
 		}
 
 	}
+	
 }
 
 int calculateValue(int n, int k)
-{
-	/*
-	int xx = 0;
-	int result = 1;
-	std::cout << "Enter number for factorial\n";
-	std::cin >> xx;
-	std::cout << "Your number factorialized: " << calculateFactorial(xx, result) << std::endl;
-	*/
-	int nn = 0;
-	int kk = 0;
-	std::cout << "Enter number for n\n";
-	std::cin >> nn;
-	std::cout << "Enter number for k\n";
-	std::cin >> kk;
-	std::cout << "Your 'choose' number: " << calculateCombination(nn, kk) << std::endl;
-	return 0;
-}
-
-int calculateCombination(int n, int k)
 {
 	int t = 1;
 	int tt = 1;
 	for (int i = n; i > (n-k); i--)
 	{
 		t = t*i;
-		std::cout << "t: " << t << std::endl;
+		//std::cout << "t: " << t << std::endl;
 	}
-	std::cout << "k : "<< k << std::endl;
+	//std::cout << "k : "<< k << std::endl;
 	for (int j = k; j > 0; j--)
 	{
 		tt = tt*j;
-		std::cout << "tt: " << tt << std::endl;
+		//std::cout << "tt: " << tt << std::endl;
 	}
 	t = t / tt;
-	std::cout << "Your combination is: " << t << std::endl;
+	//std::cout << "Your combination is: " << t << std::endl;
 	return t;
 }
+
+//arr[] is the array to write in
+//k is the number of subset from the set S
+//maxS is the maximum number in the array
+bool next_combination(int arr[], int k, int maxS)
+{
+	int value = 0;
+	for (int j = (k - 1); j > 0; j--)
+	{
+		if (arr[j]+(k-j) <= maxS)
+		{
+			value = arr[j] + 1;
+			for (int r = j; r < (k - 1); r++)
+			{
+				arr[r] = value;
+				value++;
+			}
+			return true;
+		}
+	}
+	return false;
+}
+
+void resetArray(int arr[])
+{
+	for (int i = 0; i < 99; i++)
+		arr[i] = 0;
+}
+
+void printArray(int arr[])
+{
+	std::cout << "{";
+	for (int i = 0; i < 99; i++)
+	{
+		//if (arr[i] != 0 && i != 98 && arr[i + 1] != 0)
+		//{		
+		if (arr[i] != 0)
+			std::cout << arr[i];
+		//}
+		if (arr[i] != 0 && arr[i + 1] != 0 && i != 98)
+			std::cout << ",";
+	}
+	std::cout << "}" << std::endl;
+}
+
