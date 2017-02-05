@@ -7,6 +7,7 @@ bool next_combination(int[], int, int);
 void resetArray(int[]);
 void printArray(int[]);
 void printArraySubset(int[],int k);
+float calculateEfficiency(int[]);
 
 int main()
 {
@@ -36,32 +37,45 @@ void userMenu()
 		std::cin >> userChoice;
 		switch (userChoice)
 		{
-			case 0:
-				std::cout << "You chose 0.\n";
-				return; 
-				break;
-			case 1:
-				resetArray(setArray);
-				std::cout << "You chose 1.\n";
-				std::cout << "Enter number for n\n";
-				std::cin >> n;
-				std::cout << "Enter number for k\n";
-				std::cin >> k;
-				for (int i = 0; i < n; i++)
-				{
-					setArray[i] = i+1;
-					
-				}
-				std::cout << "The set: ";
-				printArray(setArray);
-				std::cout << "All subsets of " << k << "-combination:" << std::endl;
-				while (next_combination(setArray, k, n)) {}
-				break;
-			case 2:
-				break;
-			case 3:
+		case 0:
+			std::cout << "You chose 0.\n";
+			return;
+			break;
+		case 1:
+			resetArray(setArray);
+			std::cout << "You chose 1.\n";
+			std::cout << "Enter number for n\n";
+			std::cin >> n;
+			std::cout << "Enter number for k\n";
+			std::cin >> k;
+			for (int i = 0; i < n; i++)
+			{
+				setArray[i] = i + 1;
+
+			}
+			std::cout << "The set: ";
+			printArray(setArray);
+			std::cout << "All subsets of " << k << "-combination:" << std::endl;
+			while (next_combination(setArray, k, n)) {}
+			break;
+		case 2:
+			break;
+		case 3:
+			{
 				std::cout << "You chose 3.\n";
+				int pos = 0;
+				int input = 1;
+
+				while (pos != 99 && input != 0)
+				{
+					std::cout << "Enter coin denomination for set position " << pos << " (0 to stop)" << std::endl;
+					std::cin >> input;
+					setArray[pos] = input;
+					pos++;
+				}
+				std::cout << "The efficiency of your set is " << calculateEfficiency(setArray) << std::endl;
 				break;
+			}
 			case 4:
 				std::cout << "You chose 4.\n";
 				break;
@@ -175,4 +189,17 @@ void printArraySubset(int arr[], int k)
 			std::cout << ",";
 	}
 	std::cout << "}" << std::endl;
+}
+
+float calculateEfficiency(int arr[])
+{
+	float value = 0;
+	for (int i = 0; i < 99; i++)
+	{
+		if (arr[i] != 0)
+			value += arr[i];
+
+	}
+	value /= 99;
+	return value;
 }
