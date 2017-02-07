@@ -8,6 +8,8 @@ void resetArray(int[]);
 void printArray(int[]);
 void printArraySubset(int[],int k);
 float calculateEfficiency(int[]);
+void setGreatestEfficiency(int);
+int greedyAlgorithm(int[], int,int);
 
 int main()
 {
@@ -33,6 +35,7 @@ void userMenu()
 		std::cout << "2: ---\n";
 		std::cout << "3: Input coin denomination S, print efficiency\n";
 		std::cout << "4: Input n, returns coin denomination S of best efficiency\n";
+		std::cout << "5: Test greedy\n";
 		std::cout << "0: Quit\n";
 		std::cin >> userChoice;
 		switch (userChoice)
@@ -78,7 +81,22 @@ void userMenu()
 			}
 			case 4:
 				std::cout << "You chose 4.\n";
+				std::cout << "Enter max coin denomination: ";
+				std::cin >> n;
 				break;
+			case 5:
+				int pos = 0;
+				int input = 1;
+				std::cout << "Enter n: ";
+				std::cin >> n;
+				while (pos != 99 && input != 0)
+				{
+					std::cout << "Enter coin denomination for set position " << pos << " (0 to stop)" << std::endl;
+					std::cin >> input;
+					setArray[pos] = input;
+					pos++;
+				}
+				std::cout<<"Number of coins returned: " <<  greedyAlgorithm(setArray, pos, n) << std::endl;
 		}
 	}
 }
@@ -202,4 +220,29 @@ float calculateEfficiency(int arr[])
 	}
 	value /= 99;
 	return value;
+}
+
+void setGreatestEfficiency(int n)
+{
+	for (int i = 0; i < n; i++)
+		for (int j = 0; j < n; j++)
+			n++;
+
+}
+
+int greedyAlgorithm(int arr[], int arraySize, int c)
+{
+	int numbOfCoins = 0;
+	int i = arraySize-2;
+	while (i != -1)
+	{
+		if (c / arr[i] >= 1)
+		{
+			numbOfCoins += c / arr[i];
+			c = c%arr[i];
+		}
+		else
+			i--;
+	}
+	return numbOfCoins;
 }
