@@ -7,7 +7,7 @@ bool next_combination(int[], int, int);
 void resetArray(int[]);
 void printArray(int[]);
 void printArraySubset(int[],int k);
-float calculateEfficiency(int[]);
+float calculateEfficiency(int[],int);
 void setGreatestEfficiency(int);
 int greedyAlgorithm(int[], int,int);
 
@@ -76,7 +76,7 @@ void userMenu()
 					setArray[pos] = input;
 					pos++;
 				}
-				std::cout << "The efficiency of your set is " << calculateEfficiency(setArray) << std::endl;
+				std::cout << "The efficiency of your set is " << calculateEfficiency(setArray,pos) << std::endl;
 				break;
 			}
 			case 4:
@@ -209,14 +209,13 @@ void printArraySubset(int arr[], int k)
 	std::cout << "}" << std::endl;
 }
 
-float calculateEfficiency(int arr[])
+float calculateEfficiency(int arr[],int arraySize)
 {
 	float value = 0;
-	for (int i = 0; i < 99; i++)
+	for (int i = 1; i <= 99; i++)
 	{
-		if (arr[i] != 0)
-			value += arr[i];
-
+		value += greedyAlgorithm(arr, arraySize, i);
+		//std::cout << value << std::endl;
 	}
 	value /= 99;
 	return value;
