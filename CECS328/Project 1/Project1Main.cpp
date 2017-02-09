@@ -8,7 +8,7 @@ void resetArray(int[]);
 void printArray(int[]);
 void printArraySubset(int[],int k);
 float calculateEfficiency(int[],int);
-void setGreatestEfficiency(int);
+void GreatestEfficiency(int[],int[],int);
 int greedyAlgorithm(int[], int,int);
 
 int main()
@@ -27,6 +27,7 @@ void userMenu()
 	//i is the i-th subset of A
 	int n = 0, k = 0, a = 0, i = 2, j = 0;
 	int setArray[99] = {};
+	int tempSetArray[99] = {};
 	
 	while (userChoice != 0)
 	{
@@ -54,7 +55,6 @@ void userMenu()
 			for (int i = 0; i < n; i++)
 			{
 				setArray[i] = i + 1;
-
 			}
 			std::cout << "The set: ";
 			printArray(setArray);
@@ -83,6 +83,7 @@ void userMenu()
 				std::cout << "You chose 4.\n";
 				std::cout << "Enter max coin denomination: ";
 				std::cin >> n;
+				GreatestEfficiency(setArray, tempSetArray, n);
 				break;
 			case 5:
 				int pos = 0;
@@ -208,7 +209,7 @@ void printArraySubset(int arr[], int k)
 	}
 	std::cout << "}" << std::endl;
 }
-
+//returns the number of coins of denomation set
 float calculateEfficiency(int arr[],int arraySize)
 {
 	float value = 0;
@@ -221,12 +222,41 @@ float calculateEfficiency(int arr[],int arraySize)
 	return value;
 }
 
-void setGreatestEfficiency(int n)
-{
-	for (int i = 0; i < n; i++)
-		for (int j = 0; j < n; j++)
-			n++;
+void GreatestEfficiency(int arr[],int tempArr[],int centChange)
+{	
+	//biggest number of coins that can be returned is equal to the cents given
+	//so anything smaller than this will be set equal
+	int smallestNumbOfCoins = centChange;
+	int value = 0;
+	//initialize array 1,2,3,...,n
+	for (int i = 0; i < centChange; i++)
+	{
+		arr[i] = i + 1;
+	}
+	//centChange is k
+	//for each denomination k-subset of {1,2,...,n}
+	for (int i = 1; i <= centChange; i++)
+	{
+		if (next_combination(arr, i, centChange) == true)
+			printArraySubset(arr, i);
+	}
+	/*
+	for (int i = 1; i <= centChange; i++)
+	{
+		//for each cent value from 1 to c
+		for (int j = 1; i <= centChange; j++)
+		{
+			value = greedyAlgorithm(arr, centChange, centChange);
+			if ( value < smallestNumbOfCoins)
+			{
+				smallestNumbOfCoins = value;
+				//tempArr = arr;
+				for(int a = 1; a <= i;a++)
+					for(int b = 1; b <= j; j++)
 
+			}
+		}
+	}*/
 }
 
 int greedyAlgorithm(int arr[], int arraySize, int c)
