@@ -1,7 +1,6 @@
 #include <iostream>
 
 void userMenu();
-int calculateValue(int, int);
 bool next_combination(int[], int, int);
 void resetArray(int[]);
 void printArray(int[]);
@@ -28,7 +27,7 @@ void userMenu()
 	int n = 0, k = 0, a = 0, i = 2, j = 0;
 	int setArray[99] = {};
 	int tempSetArray[99] = {};
-	
+
 	while (userChoice != 0)
 	{
 		std::cout << "Make a selection\n";
@@ -89,32 +88,15 @@ void userMenu()
 				std::cout << "You chose 4.\n";
 				std::cout << "Enter max coin denomination: ";
 				std::cin >> n;
+				while (n > 99)
+				{
+					std::cout << "Max coin denomination cannot exceed 99. Try again: ";
+					std::cin >> n;
+				}
 				GreatestEfficiency(setArray, tempSetArray, n);
 				break;
 		}
 	}
-}
-
-
-
-int calculateValue(int n, int k)
-{
-	int t = 1;
-	int tt = 1;
-	for (int i = n; i > (n-k); i--)
-	{
-		t = t*i;
-		//std::cout << "t: " << t << std::endl;
-	}
-	//std::cout << "k : "<< k << std::endl;
-	for (int j = k; j > 0; j--)
-	{
-		tt = tt*j;
-		//std::cout << "tt: " << tt << std::endl;
-	}
-	t = t / tt;
-	//std::cout << "Your combination is: " << t << std::endl;
-	return t;
 }
 
 //arr[] is the array to write in
@@ -196,7 +178,6 @@ void GreatestEfficiency(int arr[],int tempArr[],int centChange)
 {	
 	//biggest number of coins that can be returned is equal to the cents given
 	//so anything smaller than this will be set equal
-	int smallestNumbOfCoins = centChange;
 	float value = 99;
 	float temp = 0;
 	int pos = 0;
@@ -206,28 +187,28 @@ void GreatestEfficiency(int arr[],int tempArr[],int centChange)
 	{
 		arr[i] = i+1;
 	}
-	std::cout << "/////////////////////\n";
-	for (int i = 0; i < centChange; i++)
-	{
-		std::cout << arr[i];
-	}
-	std::cout << "\n/////////////////////\n";
+	//std::cout << "/////////////////////\n";
+	////for (int i = 0; i < centChange; i++)
+	//{
+	//	std::cout << arr[i];
+	//}
+	//std::cout << "\n/////////////////////\n";
 	//k-subset i
 	for (int i = 1; i <= centChange; i++)
 	{
-		resetArray(arr);
+		//resetArray(arr);
 		for (int j = 0; j < centChange; j++)
 		{
 			arr[j] = j+1;
 		}
-		printArraySubset(arr, i);
-		std::cout << calculateEfficiency(arr, centChange, centChange) << std::endl;
+		//printArraySubset(arr, i);
+		//std::cout << calculateEfficiency(arr, centChange, centChange) << std::endl;
 		//std::cout << "Coins returned: " << greedyAlgorithm(arr, i, centChange) << std::endl;
 		while (next_combination(arr, i, centChange))
 		{
-			printArraySubset(arr, i);
+			//printArraySubset(arr, i);
 			temp = calculateEfficiency(arr, centChange, centChange);
-			std::cout << temp << std::endl;
+			//std::cout << temp << std::endl;
 			if (temp < value)
 			{
 				value = temp;
