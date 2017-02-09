@@ -207,14 +207,19 @@ void GreatestEfficiency(int arr[],int tempArr[],int centChange)
 		while (next_combination(arr, i, centChange))
 		{
 			//printArraySubset(arr, i);
-			temp = calculateEfficiency(arr, centChange, centChange);
-			//std::cout << temp << std::endl;
-			if (temp < value)
+			if (arr[0] == 1)
 			{
-				value = temp;
-				setArraySubset(arr, tempArr, i);
-				pos = i;
+				printArraySubset(arr, i);
+				temp = calculateEfficiency(arr, centChange, centChange);
+				//std::cout << temp << std::endl;
+				if (temp < value)
+				{
+					value = temp;
+					setArraySubset(arr, tempArr, i);
+					pos = i;
+				}
 			}
+			
 		}
 	}
 	std::cout << "Greatest efficiency: " << value << std::endl;
