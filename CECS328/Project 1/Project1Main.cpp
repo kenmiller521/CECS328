@@ -7,7 +7,8 @@ bool next_combination(int[], int, int);
 void resetArray(int[]);
 void printArray(int[]);
 void printArraySubset(int[],int k);
-float calculateEfficiency(int[],int);
+void setArraySubset(int[], int[], int k);
+float calculateEfficiency(int[],int,int);
 void GreatestEfficiency(int[],int[],int);
 int greedyAlgorithm(int[], int,int);
 
@@ -59,7 +60,11 @@ void userMenu()
 			std::cout << "The set: ";
 			printArray(setArray);
 			std::cout << "All subsets of " << k << "-combination:" << std::endl;
-			while (next_combination(setArray, k, n)) {}
+			printArraySubset(setArray, k);
+			while (next_combination(setArray, k, n)) 
+			{
+				printArraySubset(setArray, k);
+			}
 			break;
 		case 2:
 			break;
@@ -73,10 +78,13 @@ void userMenu()
 				{
 					std::cout << "Enter coin denomination for set position " << pos << " (0 to stop)" << std::endl;
 					std::cin >> input;
-					setArray[pos] = input;
-					pos++;
+					if (input != 0)
+					{
+						setArray[pos] = input;
+						pos++;
+					}
 				}
-				std::cout << "The efficiency of your set is " << calculateEfficiency(setArray,pos) << std::endl;
+				std::cout << "The efficiency of your set is " << calculateEfficiency(setArray,pos,99) << std::endl;
 				break;
 			}
 			case 4:
@@ -94,46 +102,19 @@ void userMenu()
 				{
 					std::cout << "Enter coin denomination for set position " << pos << " (0 to stop)" << std::endl;
 					std::cin >> input;
-					setArray[pos] = input;
-					pos++;
+					if (input != 0)
+					{
+						setArray[pos] = input;
+						pos++;
+					}
+					
 				}
 				std::cout<<"Number of coins returned: " <<  greedyAlgorithm(setArray, pos, n) << std::endl;
 		}
 	}
 }
 
-void combination(int n, int k, int a, int i, int arr[], int j)
-{
-	//int value = 0;
-	if (k == 1)
-	{
-		arr[j] = a + 1;
-		return;
-	}
-	n--;
-	k--;
-	while (n >= k)
-	{
-		//take combination calculation and set to value
-		int value = calculateValue(n,k);
-		if (i < value)
-		{
-			arr[j] = a;
-			a++;
-			j++;
-			combination(n, k, a, i, arr, j);
-			return;
-		}
-		else
-		{
-			n--;
-			a++;
-			i -= value;
-		}
 
-	}
-	
-}
 
 int calculateValue(int n, int k)
 {
@@ -158,9 +139,10 @@ int calculateValue(int n, int k)
 //arr[] is the array to write in
 //k is the number of subset from the set S
 //maxS is the maximum number in the array
+int globalArray[99] = {};
 bool next_combination(int arr[], int k, int maxS)
 {
-	printArraySubset(arr, k);
+	//printArraySubset(arr, k);
 	int value = 0;
 	for (int j = (k - 1); j >= 0; j--)
 	{
@@ -170,6 +152,7 @@ bool next_combination(int arr[], int k, int maxS)
 			for (int r = j; r <= (k - 1); r++)
 			{
 				arr[r] = value;
+				globalArray[r] = value;
 				value++;
 			}
 			return true;
@@ -209,8 +192,21 @@ void printArraySubset(int arr[], int k)
 	}
 	std::cout << "}" << std::endl;
 }
+void setArraySubset(int arr[], int arr2[],int k)
+{
+	//std::cout << "{";
+	for (int i = 0; i <= k; i++)
+	{
+		if (arr[i] != 0)
+			arr2[i] = arr[i];
+			//std::cout << arr[i];
+		//if (i + 1 != k)
+			//std::cout << ",";
+	}
+	//std::cout << "}" << std::endl;
+}
 //returns the number of coins of denomation set
-float calculateEfficiency(int arr[],int arraySize)
+float calculateEfficiency(int arr[],int arraySize,int c)
 {
 	float value = 0;
 	for (int i = 1; i <= 99; i++)
@@ -227,19 +223,58 @@ void GreatestEfficiency(int arr[],int tempArr[],int centChange)
 	//biggest number of coins that can be returned is equal to the cents given
 	//so anything smaller than this will be set equal
 	int smallestNumbOfCoins = centChange;
-	int value = 0;
+	float value = 99;
+	float temp = 0;
 	//initialize array 1,2,3,...,n
+	resetArray(arr);
 	for (int i = 0; i < centChange; i++)
 	{
-		arr[i] = i + 1;
+		arr[i] = i+1;
 	}
-	//centChange is k
-	//for each denomination k-subset of {1,2,...,n}
+	std::cout << "/////////////////////\n";
+	for (int i = 0; i < centChange; i++)
+	{
+		std::cout << arr[i];
+	}
+	std::cout << "\n/////////////////////\n";
+	//k-subset i
 	for (int i = 1; i <= centChange; i++)
 	{
-		if (next_combination(arr, i, centChange) == true)
+		resetArray(arr);
+		for (int j = 0; j < centChange; j++)
+		{
+			arr[j] = j+1;
+		}
+		printArraySubset(arr, i);
+		std::cout << calculateEfficiency(arr, centChange, centChange) << std::endl;
+		//std::cout << "Coins returned: " << greedyAlgorithm(arr, i, centChange) << std::endl;
+		while (next_combination(arr, i, centChange))
+		{
 			printArraySubset(arr, i);
+			temp = calculateEfficiency(arr, centChange, centChange);
+			std::cout << temp << std::endl;
+			if (temp < value)
+			{
+				value = temp;
+				setArraySubset(arr, tempArr, i);
+			}
+			//std::cout << "Coins returned: " << greedyAlgorithm(arr, i, centChange) << std::endl;
+		}
 	}
+	std::cout << "Greatest efficiency: " << value << std::endl;
+	std::cout << "The set: ";
+	printArray(tempArr);
+	
+	//centChange is k
+	//for each denomination k-subset of {1,2,...,n}
+	//for (int i = 1; i <= centChange; i++)
+	//{
+		//printArraySubset(arr, i);
+		//if (next_combination(arr, i, centChange) == true)
+		//	continue;
+			//continue;
+			//printArraySubset(arr, i);
+	//}
 	/*
 	for (int i = 1; i <= centChange; i++)
 	{
@@ -262,7 +297,7 @@ void GreatestEfficiency(int arr[],int tempArr[],int centChange)
 int greedyAlgorithm(int arr[], int arraySize, int c)
 {
 	int numbOfCoins = 0;
-	int i = arraySize-2;
+	int i = arraySize-1;
 	while (i != -1)
 	{
 		if (c / arr[i] >= 1)
@@ -273,5 +308,8 @@ int greedyAlgorithm(int arr[], int arraySize, int c)
 		else
 			i--;
 	}
-	return numbOfCoins;
+	if (c == 0)
+		return numbOfCoins;
+	else
+		return 0;
 }
