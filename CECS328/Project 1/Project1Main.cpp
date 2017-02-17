@@ -176,18 +176,19 @@ float calculateEfficiency(int arr[],int arraySize,int c)
 
 void GreatestEfficiency(int arr[],int tempArr[],int setSize)
 {	
-	int value = 99;
-	int temp = 99;
+	float value = 99;
+	float temp = 99;
 	int pos = 0;
 	int currentIndex = setSize - 1;
 	int finishIndex = setSize - 1;
 	int counter = 1;
-	//make set full of 1
+	//reset the set
 	for(int i = 0; i < 99; i++)
 	{ 
 		tempArr[i] = 0;
 		arr[i] = 0;
 	}
+	//make all items up to setSize to be 1 cent
 	for (int i = 0; i < setSize; i++)
 	{
 		tempArr[i] = 1;
@@ -196,41 +197,91 @@ void GreatestEfficiency(int arr[],int tempArr[],int setSize)
 	int i = setSize - 1;
 	while (arr[1] != 99)
 	{
-
+		for (int j = 2; j <= 99; j++)
+		{
+			if (j == 99)
+			{
+				//arr[i - 1]++;
+				arr[i] = j;
+				printArraySubset(arr, setSize);
+				for (int k = setSize-2; k > 0; k--)
+				{
+					if (arr[k] < 99)
+					{
+						arr[k]++;
+						arr[k + 1] = 1;
+						break;
+					}
+						
+				}
+				temp = calculateEfficiency(arr, setSize, 99);
+				if (temp < value)
+				{
+					value = temp;
+					pos = i;
+					setArraySubset(arr, tempArr, setSize);
+				}
+			}
+			else
+			{
+				arr[i] = j;
+				printArraySubset(arr, setSize);
+				temp = calculateEfficiency(arr, setSize, 99);
+				if (temp < value)
+				{
+					value = temp;
+					pos = i;
+					setArraySubset(arr, tempArr, setSize);
+				}
+			}
+				
+		}
 	}
-
-	for (int i = setSize - 1; i != 0; i--) 
+	/*while (arr[1] != 99)
 	{
 		for (int j = 2; j <= 99; j++)
 		{
 			if (j == 99)
 			{
-				arr[i - 1]++;
+				//arr[i - 1]++;
+				arr[i] = j;
+				//printArraySubset(arr, setSize);
+				for (int k = setSize-2; k > 0; k--)
+				{
+					if (arr[k] < 99)
+					{
+						arr[k]++;
+						arr[k + 1] = 1;
+						break;
+					}
+						
+				}
+				temp = calculateEfficiency(arr, setSize, 99);
+				if (temp < value)
+				{
+					value = temp;
+					pos = i;
+					setArraySubset(arr, tempArr, setSize);
+				}
 			}
-			arr[i] = j;
-			printArraySubset(arr, setSize);
-		}
-	}
-
-	/*
-	//starts at index 1 because the set should always contain 1
-	for (int i = 1; i < setSize; i++)
-	{
-		for (int j = 2; j <= 99; j++)
-		{
-			arr[i] = j;
-			temp = calculateEfficiency(arr, i, 99);
-			if (temp < value)
+			else
 			{
-				value = temp;
-				pos = i;
-				setArraySubset(arr, tempArr, i);
-			}				
+				arr[i] = j;
+				//printArraySubset(arr, setSize);
+				temp = calculateEfficiency(arr, setSize, 99);
+				if (temp < value)
+				{
+					value = temp;
+					pos = i;
+					setArraySubset(arr, tempArr, setSize);
+				}
+			}
+				
 		}
 	}*/
 	std::cout << "Greatest efficiency: " << value << std::endl;
 	std::cout << "The set: ";
-	printArraySubset(tempArr, pos);
+	printArraySubset(tempArr, setSize);
 
 
 
