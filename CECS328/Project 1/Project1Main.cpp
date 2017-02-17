@@ -86,11 +86,11 @@ void userMenu()
 			}
 			case 4:
 				std::cout << "You chose 4.\n";
-				std::cout << "Enter max coin denomination: ";
+				std::cout << "Enter number of elements to be in the set: ";
 				std::cin >> n;
 				while (n > 99)
 				{
-					std::cout << "Max coin denomination cannot exceed 99. Try again: ";
+					std::cout << "Cannot exceed 99. Try again: ";
 					std::cin >> n;
 				}
 				GreatestEfficiency(setArray, tempSetArray, n);
@@ -174,8 +174,72 @@ float calculateEfficiency(int arr[],int arraySize,int c)
 	return value;
 }
 
-void GreatestEfficiency(int arr[],int tempArr[],int centChange)
+void GreatestEfficiency(int arr[],int tempArr[],int setSize)
 {	
+	int value = 99;
+	int temp = 99;
+	int pos = 0;
+	int currentIndex = setSize - 1;
+	int finishIndex = setSize - 1;
+	int counter = 1;
+	//make set full of 1
+	for(int i = 0; i < 99; i++)
+	{ 
+		tempArr[i] = 0;
+		arr[i] = 0;
+	}
+	for (int i = 0; i < setSize; i++)
+	{
+		tempArr[i] = 1;
+		arr[i] = 1;
+	}
+	int i = setSize - 1;
+	while (arr[1] != 99)
+	{
+
+	}
+
+	for (int i = setSize - 1; i != 0; i--) 
+	{
+		for (int j = 2; j <= 99; j++)
+		{
+			if (j == 99)
+			{
+				arr[i - 1]++;
+			}
+			arr[i] = j;
+			printArraySubset(arr, setSize);
+		}
+	}
+
+	/*
+	//starts at index 1 because the set should always contain 1
+	for (int i = 1; i < setSize; i++)
+	{
+		for (int j = 2; j <= 99; j++)
+		{
+			arr[i] = j;
+			temp = calculateEfficiency(arr, i, 99);
+			if (temp < value)
+			{
+				value = temp;
+				pos = i;
+				setArraySubset(arr, tempArr, i);
+			}				
+		}
+	}*/
+	std::cout << "Greatest efficiency: " << value << std::endl;
+	std::cout << "The set: ";
+	printArraySubset(tempArr, pos);
+
+
+
+
+
+
+
+
+	/*
 	//biggest number of coins that can be returned is equal to the cents given
 	//so anything smaller than this will be set equal
 	float value = 99;
@@ -187,13 +251,6 @@ void GreatestEfficiency(int arr[],int tempArr[],int centChange)
 	{
 		arr[i] = i+1;
 	}
-	//std::cout << "/////////////////////\n";
-	////for (int i = 0; i < centChange; i++)
-	//{
-	//	std::cout << arr[i];
-	//}
-	//std::cout << "\n/////////////////////\n";
-	//k-subset i
 	for (int i = 1; i <= centChange; i++)
 	{
 		//resetArray(arr);
@@ -209,7 +266,7 @@ void GreatestEfficiency(int arr[],int tempArr[],int centChange)
 			//printArraySubset(arr, i);
 			if (arr[0] == 1)
 			{
-				printArraySubset(arr, i);
+				//printArraySubset(arr, i);
 				temp = calculateEfficiency(arr, centChange, centChange);
 				//std::cout << temp << std::endl;
 				if (temp < value)
@@ -224,7 +281,7 @@ void GreatestEfficiency(int arr[],int tempArr[],int centChange)
 	}
 	std::cout << "Greatest efficiency: " << value << std::endl;
 	std::cout << "The set: ";
-	printArraySubset(tempArr,pos);
+	printArraySubset(tempArr,pos);*/
 }
 
 int greedyAlgorithm(int arr[], int arraySize, int c)
