@@ -183,11 +183,11 @@ void GreatestEfficiency(int arr[],int tempArr[],int setSize)
 	int finishIndex = setSize - 1;
 	int counter = 1;
 	//reset the set
-	for(int i = 0; i < 99; i++)
-	{ 
-		tempArr[i] = 0;
-		arr[i] = 0;
-	}
+	//for(int i = 0; i < 99; i++)
+	//{ 
+	//	tempArr[i] = 0;
+	//	arr[i] = 0;
+	//}
 	//make all items up to setSize to be 1 cent
 	for (int i = 0; i < setSize; i++)
 	{
@@ -195,46 +195,59 @@ void GreatestEfficiency(int arr[],int tempArr[],int setSize)
 		arr[i] = 1;
 	}
 	int i = setSize - 1;
-	while (arr[1] != 99)
+	if (setSize == 1)
 	{
-		for (int j = 2; j <= 99; j++)
+		temp = calculateEfficiency(arr, setSize, 99);
+		if (temp < value)
 		{
-			if (j == 99)
+			value = temp;
+			pos = i;
+			setArraySubset(arr, tempArr, setSize);
+		}
+	}
+	else
+	{
+		while (arr[1] != 99)
+		{
+			for (int j = 2; j <= 99; j++)
 			{
-				//arr[i - 1]++;
-				arr[i] = j;
-				printArraySubset(arr, setSize);
-				for (int k = setSize-2; k > 0; k--)
+				if (j == 99)
 				{
-					if (arr[k] < 99)
+					//arr[i - 1]++;
+					arr[i] = j;
+					//printArraySubset(arr, setSize);
+					for (int k = setSize - 2; k > 0; k--)
 					{
-						arr[k]++;
-						arr[k + 1] = 1;
-						break;
+						if (arr[k] < 99)
+						{
+							arr[k]++;
+							arr[k + 1] = 1;
+							break;
+						}
+
 					}
-						
+					temp = calculateEfficiency(arr, setSize, 99);
+					if (temp < value)
+					{
+						value = temp;
+						pos = i;
+						setArraySubset(arr, tempArr, setSize);
+					}
 				}
-				temp = calculateEfficiency(arr, setSize, 99);
-				if (temp < value)
+				else
 				{
-					value = temp;
-					pos = i;
-					setArraySubset(arr, tempArr, setSize);
+					arr[i] = j;
+					//printArraySubset(arr, setSize);
+					temp = calculateEfficiency(arr, setSize, 99);
+					if (temp < value)
+					{
+						value = temp;
+						pos = i;
+						setArraySubset(arr, tempArr, setSize);
+					}
 				}
+
 			}
-			else
-			{
-				arr[i] = j;
-				printArraySubset(arr, setSize);
-				temp = calculateEfficiency(arr, setSize, 99);
-				if (temp < value)
-				{
-					value = temp;
-					pos = i;
-					setArraySubset(arr, tempArr, setSize);
-				}
-			}
-				
 		}
 	}
 	/*while (arr[1] != 99)
