@@ -25,24 +25,48 @@ void userMenu()
 	int counter = 0;
 	int arraySize = 0;
 	std::string userStr;
-	std::getline(std::cin, userStr);
-	
+	//Get the user input
+
+	std::string delim = ",";
+	std::string token;
+	size_t pos = 0;
+
+	std::cout << std::endl;
 	int userChoice = 1;
 	while (userChoice != 0)
 	{
 		std::cout << "Make a selection\n";
-		std::cout << "1: Enter n & k, print all k subsets\n";
+		std::cout << "1: Enter array of integers and prints MSS for each algorithm\n";
 		std::cout << "2: ---\n";
-		std::cout << "0: Quit\n";
+		std::cout << "3: Quit\n";
 		std::cin >> userChoice;
 		switch (userChoice)
 		{
-		case 0:
-			std::cout << "You chose 0.\n";
+		case 3:
+			std::cout << "You chose 3. Quitting\n";
 			return;
 			break;
 		case 1:
-
+			std::cout << "Enter signed integers seperated by commas(i.e -2,11,-4,13,-5,-2): ";
+			std::cin.ignore(99, '\n');
+			std::getline(std::cin, userStr);
+			//the delimiter to be extracted
+			//append a comma at the end to include last number
+			userStr.append(",");
+			//Go through string, remove delimer and set into token, then convert it to a signed integer and input into the array
+			while ((pos = userStr.find(delim)) != std::string::npos)
+			{
+				token = userStr.substr(0, pos);
+				arr[counter] = std::stoi(token);
+				counter++;
+				userStr.erase(0, pos + delim.length());
+			}
+			arraySize = counter;
+			std::cout << std::endl;
+			std::cout << "Freshman algorithm: " << freshmanAlgorithm(arr, arraySize) << std::endl;
+			std::cout << "Sophmore algorithm: " << sophmoreAlgorithm(arr, arraySize) << std::endl;
+			//std::cout << "Junior algorithm: " << juniorAlgorithm(arr, arraySize) << std::endl;
+			std::cout << "Senior algorithm: " << seniorAlgorithm(arr, arraySize) << std::endl;
 			break;
 		case 2:
 			break;
@@ -115,8 +139,17 @@ int juniorAlgorithm(int arr[], int left, int right)
 	return std::max(tempMax, mss_middle);
 }
 
-int juniorAlgorithmMiddle(int[], int, int, int)
+int juniorAlgorithmMiddle(int arr[], int left, int right, int middle)
 {
+	int biggestLeft = 0;
+	int biggestRight = 0;
+	int tempSum = 0;
+	for (int i = left; i >= 0; i--)
+	{
+		tempSum += arr[i];
+		if (tempSum > biggestLeft)
+			biggestLeft = tempSum;
+	}
 	return 0;
 }
 
@@ -133,10 +166,4 @@ int seniorAlgorithm(int arr[], int size)
 			this_sum = 0;
 	}
 	return max_sum;
-}
-
-std::vector<std::string> split(const std::string, char sep)
-{
-
-	return std::vector<std::string>();
 }

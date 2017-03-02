@@ -221,7 +221,7 @@ void GreatestEfficiency(int arr[],int tempArr[],int setSize)
 						if (arr[k] < 99)
 						{
 							arr[k]++;
-							arr[k + 1] = 1;
+							arr[k + 1] = arr[k];
 							break;
 						}
 
@@ -350,6 +350,7 @@ void GreatestEfficiency(int arr[],int tempArr[],int setSize)
 
 int greedyAlgorithm(int arr[], int arraySize, int c)
 {
+	//c is the change
 	int numbOfCoins = 0;
 	int i = arraySize-1;
 	while (i != -1)
