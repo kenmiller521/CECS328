@@ -12,7 +12,7 @@ int sophmoreAlgorithm(int[], int);
 int juniorAlgorithm(int[], int, int);
 int juniorAlgorithmMiddle(int[], int, int, int);
 int seniorAlgorithm(int[], int);
-
+int tempMax = 0;
 int main()
 {
 	userMenu();
@@ -47,6 +47,7 @@ void userMenu()
 			return;
 			break;
 		case 1:
+			tempMax = 0;
 			std::cout << "Enter signed integers seperated by commas(i.e -2,11,-4,13,-5,-2): ";
 			std::cin.ignore(99, '\n');
 			std::getline(std::cin, userStr);
@@ -63,9 +64,10 @@ void userMenu()
 			}
 			arraySize = counter;
 			std::cout << std::endl;
+			std::cout <<"ARRAYSIZE: " << arraySize << std::endl;
 			std::cout << "Freshman algorithm: " << freshmanAlgorithm(arr, arraySize) << std::endl;
 			std::cout << "Sophmore algorithm: " << sophmoreAlgorithm(arr, arraySize) << std::endl;
-			//std::cout << "Junior algorithm: " << juniorAlgorithm(arr, arraySize) << std::endl;
+			std::cout << "Junior algorithm: " << juniorAlgorithm(arr, 0,arraySize-1) << std::endl;
 			std::cout << "Senior algorithm: " << seniorAlgorithm(arr, arraySize) << std::endl;
 			break;
 		case 2:
@@ -112,7 +114,6 @@ int sophmoreAlgorithm(int arr[], int size)
 
 int juniorAlgorithm(int arr[], int left, int right)
 {
-	int tempMax = 0;
 	//Base case 1
 	if (right == left)
 		return arr[left];
@@ -124,7 +125,7 @@ int juniorAlgorithm(int arr[], int left, int right)
 	}
 
 	int mid = (left + right) / 2;
-
+	
 	//Find the MSS that occurs in the left half of arr
 	int mss_left = juniorAlgorithm(arr, left, mid);
 
@@ -134,23 +135,32 @@ int juniorAlgorithm(int arr[], int left, int right)
 	//Find the MSS that intersects both the left and right halves
 	//EXERCISE: implement juniorAlgorithmMiddle()
 	int mss_middle = juniorAlgorithmMiddle(arr, left, mid, right);
-
 	tempMax = std::max(mss_left, mss_right);
 	return std::max(tempMax, mss_middle);
 }
 
 int juniorAlgorithmMiddle(int arr[], int left, int right, int middle)
 {
-	int biggestLeft = 0;
+	/*int biggestLeft = 0;
 	int biggestRight = 0;
 	int tempSum = 0;
-	for (int i = left; i >= 0; i--)
+	for (int i = middle; i >= left; i--)
 	{
 		tempSum += arr[i];
+		std::cout << "tempSum LEFT: " << tempSum << std::endl;
 		if (tempSum > biggestLeft)
 			biggestLeft = tempSum;
 	}
-	return 0;
+	tempSum = 0;
+	for (int i = middle; i <= right; i++)
+	{
+		tempSum += arr[i];
+		std::cout << "tempSum RIGHT: " << tempSum << std::endl;
+		if (tempSum > biggestRight)
+			biggestRight = tempSum;
+	}
+	return (biggestLeft+biggestRight);*/
+	
 }
 
 int seniorAlgorithm(int arr[], int size)
