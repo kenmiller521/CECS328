@@ -5,13 +5,14 @@
 #include <stdio.h>
 #include <sstream>
 #include <stdlib.h>
-
+#include <time.h>
 void userMenu();
 int freshmanAlgorithm(int[], int);
 int sophmoreAlgorithm(int[], int);
 int juniorAlgorithm(int[], int, int);
 int juniorAlgorithmMiddle(int[], int, int, int);
 int seniorAlgorithm(int[], int);
+void executeSpecificAlgorithm(int,int[],int);
 int tempMax = 0;
 int main()
 {
@@ -22,8 +23,11 @@ int main()
 void userMenu()
 {
 	int arr[99] = {};
+	int* dynamArray;
+	int userChoiceArray[4] = {};
 	int counter = 0;
 	int arraySize = 0;
+	int lengthN = 0;
 	std::string userStr;
 	//Get the user input
 
@@ -37,7 +41,7 @@ void userMenu()
 	{
 		std::cout << "Make a selection\n";
 		std::cout << "1: Enter array of integers and prints MSS for each algorithm\n";
-		std::cout << "2: ---\n";
+		std::cout << "2: Enter n, enter what algorithm to execute, returns MSS\n";
 		std::cout << "3: Quit\n";
 		std::cin >> userChoice;
 		switch (userChoice)
@@ -64,13 +68,43 @@ void userMenu()
 			}
 			arraySize = counter;
 			std::cout << std::endl;
-			std::cout <<"ARRAYSIZE: " << arraySize << std::endl;
 			std::cout << "Freshman algorithm: " << freshmanAlgorithm(arr, arraySize) << std::endl;
 			std::cout << "Sophmore algorithm: " << sophmoreAlgorithm(arr, arraySize) << std::endl;
-			std::cout << "Junior algorithm: " << juniorAlgorithm(arr, 0,arraySize-1) << std::endl;
+			std::cout << "Junior algorithm: " << juniorAlgorithm(arr, 0, arraySize) << std::endl;
 			std::cout << "Senior algorithm: " << seniorAlgorithm(arr, arraySize) << std::endl;
 			break;
 		case 2:
+			for (int i = 0; i < 4; i++)
+			{
+				userChoiceArray[i] = 0;
+			}
+			std::cout << "Enter length: ";
+			std::cin >> lengthN;
+			std::cout << "Enter choices for algorithms (i.e. 1234)" << std::endl;
+			std::cout << "1: Freshman" << std::endl;
+			std::cout << "2: Sophmore" << std::endl;
+			std::cout << "3: Junior" << std::endl;
+			std::cout << "4: Senior" << std::endl;
+			std::cin.ignore(99, '\n');
+			std::getline(std::cin, userStr);
+			dynamArray = new int[lengthN];
+			for (int i = 0; i < userStr.length(); i++)
+			{
+				userChoiceArray[i] = userStr[i] - '0';
+			}
+			srand(time(0));
+			clock_t t = clock();
+			for (int i = 0; i < lengthN; i++)
+			{
+				dynamArray[i] = (rand() % 100)-50;
+			}
+			t = clock() - t;
+			std::cout << "It took " << (float)t / CLOCKS_PER_SEC << " seconds to make the random array." << std::endl;
+			for (int i = 0; i < 4; i++)
+			{
+				if(userChoiceArray[i] != 0)
+					executeSpecificAlgorithm(userChoiceArray[i],dynamArray,lengthN);
+			}
 			break;
 		}
 	}
@@ -135,15 +169,38 @@ int juniorAlgorithm(int arr[], int left, int right)
 	//Find the MSS that intersects both the left and right halves
 	//EXERCISE: implement juniorAlgorithmMiddle()
 	int mss_middle = juniorAlgorithmMiddle(arr, left, mid, right);
+	//std::cout << "MSS_LEFT: " << mss_left << std::endl;
+	//std::cout << "MSS_RIGHT: " << mss_right << std::endl;
+	//std::cout << "MSS_MIDDLE: " << mss_middle << std::endl;
 	tempMax = std::max(mss_left, mss_right);
 	return std::max(tempMax, mss_middle);
 }
 
-int juniorAlgorithmMiddle(int arr[], int left, int right, int middle)
+int juniorAlgorithmMiddle(int arr[], int left, int middle, int right)
 {
-	/*int biggestLeft = 0;
+	int biggestLeft = 0;
 	int biggestRight = 0;
 	int tempSum = 0;
+	//std::cout << "LEFT: " << left << std::endl;
+	//std::cout << "MIDDLE: " << middle << std::endl;
+	//std::cout << "RIGHT: " << right << std::endl;
+	//std::cout << "________" << std::endl;
+	for (int i = middle - 1; i >= left; i--)
+	{
+		tempSum += arr[i];
+		//std::cout << "tempSum LEFT: " << tempSum << std::endl;
+		if (tempSum > biggestLeft)
+			biggestLeft = tempSum;
+	}
+	tempSum = 0;
+	for (int i = middle; i < right; i++)
+	{
+		tempSum += arr[i];
+		//std::cout << "tempSum RIGHT: " << tempSum << std::endl;
+		if (tempSum > biggestRight)
+			biggestRight = tempSum;
+	}
+	/*
 	for (int i = middle; i >= left; i--)
 	{
 		tempSum += arr[i];
@@ -152,14 +209,16 @@ int juniorAlgorithmMiddle(int arr[], int left, int right, int middle)
 			biggestLeft = tempSum;
 	}
 	tempSum = 0;
-	for (int i = middle; i <= right; i++)
+	for (int i = middle; i < right; i++)
 	{
 		tempSum += arr[i];
-		std::cout << "tempSum RIGHT: " << tempSum << std::endl;
+		//std::cout << "tempSum RIGHT: " << tempSum << std::endl;
 		if (tempSum > biggestRight)
 			biggestRight = tempSum;
-	}
-	return (biggestLeft+biggestRight);*/
+	}*/
+	//std::cout << "biggestLeft: " << biggestLeft << std::endl;
+	//std::cout << "biggestRight: " << biggestRight << std::endl;
+	return (biggestLeft+biggestRight);
 	
 }
 
@@ -176,4 +235,32 @@ int seniorAlgorithm(int arr[], int size)
 			this_sum = 0;
 	}
 	return max_sum;
+}
+
+void executeSpecificAlgorithm(int number,int arr[], int arraySize)
+{
+	clock_t t = clock();
+	switch (number)
+	{
+	case 1:
+		freshmanAlgorithm(arr, arraySize);
+		t = clock() - t;
+		std::cout << "Freshman algorithm took " << (float)t / CLOCKS_PER_SEC << " seconds to complete." << std::endl;
+		break;
+	case 2:
+		sophmoreAlgorithm(arr, arraySize);
+		t = clock() - t;
+		std::cout << "Sophmmore algorithm took " << (float)t / CLOCKS_PER_SEC << " seconds to complete." << std::endl;
+		break;
+	case 3:
+		juniorAlgorithm(arr, 0, arraySize);
+		t = clock() - t;
+		std::cout << "Junior algorithm took " << (float)t / CLOCKS_PER_SEC << " seconds to complete." << std::endl;		
+		break;
+	case 4:
+		seniorAlgorithm(arr, arraySize);
+		t = clock() - t;
+		std::cout << "Senior algorithm took " << (float)t / CLOCKS_PER_SEC << " seconds to complete." << std::endl;
+		break;
+	}
 }
