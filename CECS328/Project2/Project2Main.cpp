@@ -181,14 +181,9 @@ int juniorAlgorithmMiddle(int arr[], int left, int middle, int right)
 	int biggestLeft = 0;
 	int biggestRight = 0;
 	int tempSum = 0;
-	//std::cout << "LEFT: " << left << std::endl;
-	//std::cout << "MIDDLE: " << middle << std::endl;
-	//std::cout << "RIGHT: " << right << std::endl;
-	//std::cout << "________" << std::endl;
 	for (int i = middle - 1; i >= left; i--)
 	{
 		tempSum += arr[i];
-		//std::cout << "tempSum LEFT: " << tempSum << std::endl;
 		if (tempSum > biggestLeft)
 			biggestLeft = tempSum;
 	}
@@ -196,28 +191,9 @@ int juniorAlgorithmMiddle(int arr[], int left, int middle, int right)
 	for (int i = middle; i < right; i++)
 	{
 		tempSum += arr[i];
-		//std::cout << "tempSum RIGHT: " << tempSum << std::endl;
 		if (tempSum > biggestRight)
 			biggestRight = tempSum;
 	}
-	/*
-	for (int i = middle; i >= left; i--)
-	{
-		tempSum += arr[i];
-		std::cout << "tempSum LEFT: " << tempSum << std::endl;
-		if (tempSum > biggestLeft)
-			biggestLeft = tempSum;
-	}
-	tempSum = 0;
-	for (int i = middle; i < right; i++)
-	{
-		tempSum += arr[i];
-		//std::cout << "tempSum RIGHT: " << tempSum << std::endl;
-		if (tempSum > biggestRight)
-			biggestRight = tempSum;
-	}*/
-	//std::cout << "biggestLeft: " << biggestLeft << std::endl;
-	//std::cout << "biggestRight: " << biggestRight << std::endl;
 	return (biggestLeft+biggestRight);
 	
 }
@@ -239,28 +215,29 @@ int seniorAlgorithm(int arr[], int size)
 
 void executeSpecificAlgorithm(int number,int arr[], int arraySize)
 {
+	int mss = 0;
 	clock_t t = clock();
 	switch (number)
 	{
 	case 1:
-		freshmanAlgorithm(arr, arraySize);
+		mss = freshmanAlgorithm(arr, arraySize);
 		t = clock() - t;
-		std::cout << "Freshman algorithm took " << (float)t / CLOCKS_PER_SEC << " seconds to complete." << std::endl;
+		std::cout << "Freshman algorithm took " << (float)t / CLOCKS_PER_SEC << " seconds to complete with MSS: "<< mss << std::endl;
 		break;
 	case 2:
-		sophmoreAlgorithm(arr, arraySize);
+		mss = sophmoreAlgorithm(arr, arraySize);
 		t = clock() - t;
-		std::cout << "Sophmmore algorithm took " << (float)t / CLOCKS_PER_SEC << " seconds to complete." << std::endl;
+		std::cout << "Sophmmore algorithm took " << (float)t / CLOCKS_PER_SEC << " seconds to complete with MSS: " << mss << std::endl;
 		break;
 	case 3:
-		juniorAlgorithm(arr, 0, arraySize);
+		mss = juniorAlgorithm(arr, 0, arraySize);
 		t = clock() - t;
-		std::cout << "Junior algorithm took " << (float)t / CLOCKS_PER_SEC << " seconds to complete." << std::endl;		
+		std::cout << "Junior algorithm took " << (float)t / CLOCKS_PER_SEC << " seconds to complete with MSS: " << mss << std::endl;
 		break;
 	case 4:
-		seniorAlgorithm(arr, arraySize);
+		mss = seniorAlgorithm(arr, arraySize);
 		t = clock() - t;
-		std::cout << "Senior algorithm took " << (float)t / CLOCKS_PER_SEC << " seconds to complete." << std::endl;
+		std::cout << "Senior algorithm took " << (float)t / CLOCKS_PER_SEC << " seconds to complete with MSS: " << mss << std::endl;
 		break;
 	}
 }
